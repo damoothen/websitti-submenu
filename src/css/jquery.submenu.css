@@ -1,0 +1,27 @@
+/* line 2, ../../sass/jquery.submenu.scss */
+.submenu-content {
+  visibility: hidden;
+  position: absolute;
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+  background-color: white;
+  -moz-box-shadow: 0px 2px 5px -1px black;
+  -webkit-box-shadow: 0px 2px 5px -1px black;
+  box-shadow: 0px 2px 5px -1px black;
+}
+/* line 11, ../../sass/jquery.submenu.scss */
+.submenu-content li a,
+.submenu-content li a:focus {
+  display: inline-block;
+  color: #333333;
+  width: 100%;
+  padding: 10px;
+  text-decoration: none;
+}
+/* line 18, ../../sass/jquery.submenu.scss */
+.submenu-content li a:hover,
+.submenu-content li a:focus:hover {
+  background-color: #f2f2f2;
+  color: black;
+}
