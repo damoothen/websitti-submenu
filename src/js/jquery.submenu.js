@@ -43,7 +43,7 @@
             $submenu.css('min-width', $button.css('width'));
                         
             // Make submenu max width equal to browser width
-            $submenu.css('max-width', $(window).outerWidth() + 'px');
+            $submenu.css('max-width', $(window).width() + 'px');
             
             // Left edge of submenu is aligned with left side of button
             // Special case for right align, set with data-align to right on submenu
