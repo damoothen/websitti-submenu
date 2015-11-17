@@ -1,68 +1,92 @@
-(function ($) {
+(function($){
 
-    $.fn.submenu = function (params) {
+    $.fn.submenu = function(params){
 
         var defaults = {
-            duration: 100
+            duration: 200
         };
 
         params = $.extend({}, defaults, params);
 
+        return this.each(function(){
 
-        // Show a submenu with fade in animation
-        var showSubmenu = function ($s) {
-            $s.css({
-                opacity: 0,
-                visibility: 'visible'
-            }).animate({
-                opacity: 1
-            }, params.duration);
-            return $s;
-        };
-
-        // Hide a submenu with fade out animation
-        var hideSubmenu = function ($s) {
-            $s.animate({
-                opacity: 0
-            }, params.duration, function () {
-                $s.css({
-                    visibility: 'hidden'
-                });
-            });
-            return $s;
-        };
-
-        return this.each(function () {
             var $button = $(this);
-            var $submenu = $('#' + $button.data('target'));
-            var coordinates = $button.offset();
-            var align = $submenu.data('align');
-            var trigger = $button.data('trigger') === 'hover' ? 'mouseenter' : 'click';
-            
-            // Make submenu minimum width equal to button width
-            $submenu.css('min-width', $button.css('width'));
-                        
-            // Make submenu max width equal to browser width
-            $submenu.css('max-width', $(window).width() + 'px');
-            
-            // Left edge of submenu is aligned with left side of button
-            // Special case for right align, set with data-align to right on submenu
-            if (align === 'right')
-                coordinates.left += ($button.outerWidth() - $submenu.outerWidth());
+            var $window = $(window);
+            var id = $button.data('target');
+            var align = $button.data('align');
+            var $menu = $('#' + id);
+            var visible = false;
 
-            $button.on(trigger, function (e) {
+            var menuWidth = $menu.outerWidth();
+            var menuOffset = $button.offset();
+
+            // Place menu after button in DOM.
+            $button.after($menu);
+
+            // If menu width is less than button width, set menu width to be equal to button width.
+            if ($menu.outerWidth() < $button.outerWidth()) {
+                menuWidth = $button.outerWidth();
+            }
+
+            // If menu width is more than screen width, set it to be equal to window width
+            else if (menuWidth > $window.width()) {
+                menuWidth = $window.width();
+                menuOffset.left = 0;
+            }
+
+            else {
+                if (align === 'right') {
+                    menuOffset.left = menuOffset.left - menuWidth + $button.outerWidth();
+                    if (menuOffset.left < 0) {
+                        menuOffset.left = 0;
+                    }
+                }
+
+                // If no align, menu is aligned to left. Check if menu does not get out of screen
+                else {
+                    if (menuOffset.left + $menu.outerWidth() > $window.width()) {
+                        menuOffset.left = $window.width() - $menu.outerWidth();
+                    }
+                }
+            }
+
+            $menu.width(menuWidth);
+            $menu.offset(menuOffset);
+
+            // Display menu
+            var showMenu = function(e){
                 e.preventDefault();
-                $submenu.offset(coordinates);
-                showSubmenu($submenu);
-            });
+                var $s = e.data;
+                if (!visible) {
+                    $s.css({
+                        'opacity': 0,
+                        'visibility': 'visible'
+                    }).animate({
+                        'opacity': 1
+                    }, params.duration, function(){
+                        visible = true;
+                        $window.bind('click', $s, hideMenu);
+                        $menu.bind('mouseleave', $s, hideMenu);
+                    });
+                }
+            };
 
-            $submenu.mouseleave(function () {
-                hideSubmenu($submenu);
-            });
+            // Hide menu
+            var hideMenu = function(e){
+                if (visible) {
+                    var $s = e.data;
+                    $s.animate({
+                        opacity: 0
+                    }, params.duration, function(){
+                        $s.css('visibility', 'hidden');
+                        visible = false;
+                        $window.unbind('click', hideMenu);
+                        $menu.unbind('mouseleave', hideMenu);
+                    });
+                }
+            };
 
-            $('a', $submenu).click(function (e) {
-                hideSubmenu($submenu);
-            });
+            $button.bind('click', $menu, showMenu);
 
         });
 
