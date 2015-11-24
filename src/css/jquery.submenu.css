@@ -13,7 +13,7 @@
 /* line 11, ../../sass/jquery.submenu.scss */
 .submenu-content li a,
 .submenu-content li a:focus {
-  display: inline-block;
+  display: block;
   color: #333333;
   width: 100%;
   padding: 10px;
