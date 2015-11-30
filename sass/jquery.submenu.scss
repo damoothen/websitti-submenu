@@ -15,6 +15,7 @@
             width: 100%;
             padding: 10px;
             text-decoration: none;
+            white-space: nowrap;
             &:hover {
                 background-color: darken(white, 5%);
                 color: black;

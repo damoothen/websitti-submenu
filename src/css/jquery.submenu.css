@@ -18,8 +18,9 @@
   width: 100%;
   padding: 10px;
   text-decoration: none;
+  white-space: nowrap;
 }
-/* line 18, ../../sass/jquery.submenu.scss */
+/* line 19, ../../sass/jquery.submenu.scss */
 .submenu-content li a:hover,
 .submenu-content li a:focus:hover {
   background-color: #f2f2f2;
